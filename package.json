@@ -1,0 +1,20 @@
+{
+  "name": "text.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/polyfill": "^7.7.0",
+    "string.prototype.matchall": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.7"
+  }
+}
