@@ -1,26 +1,48 @@
+const express = require('express');
+const fs = require('fs');
 const parse = require('./engine/parser');
+
+const app = express();
 
 const processors = [
     {
+        key: 'blocks',
+        rule: /^###$/g,
+        matchType: 'split',
+        payload: {
+            component: 'block'
+        }
+    },
+    {
         key: 'multiline',
-        rule: /\n|\r|\r\n/g,
+        rule: /\r\n|\n|\r/g,
+        matchType: 'split',
         payload: {
             component: 'multiline'
         }
     },
     {
         key: 'tag',
-        rule: /@\[[\w\s-]+\]\([\w\s-]+\)$/g,
+        rule: /@\[[\w\s-]+\]\([\w\s-]+\)/g,
         payload: {
             component: 'tag'
         }
-    }
+    },
+    {
+        key: 'hashtag',
+        rule: /#\[[\w\s-]+\]\([\w\s-]+\)/g,
+        payload: {
+            component: 'hashtag'
+        }
+    },
 ];
 
-const result = parse(
-    `Some things are better
-    to remain forgotten
-    isnt that right @[Cosmin Stoica](cosmin-user-id)`
-    , processors);
+const string = fs.readFileSync('./some.txt');
 
-console.log(result);
+app.get('/', (req, res) => {
+    const result = parse(string.toString(), processors);
+
+    res.send(`<pre>${JSON.stringify(result, undefined, 4)}</pre>`);
+});
+
+app.listen(3000);
